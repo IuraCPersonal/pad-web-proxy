@@ -23,6 +23,13 @@ Here are some reasons why my idea might be relevant for a microservices architec
 4. **Geographic Distribution:** Airlines operate globally, and a distributed system can facilitate geographic distribution. By deploying microservices in different regions or countries, you can reduce latency for users in those areas, providing a better user experience.
 5. **Enhanced Resilience:** By adding microservices, we can build redundancy into critical components, ensuring high availability and disaster recovery. `Uber` uses microservices to maintain service availability even in the face of hardware or software failures.
 
+#### Define Service Boundaries - 2p
+
+Microservices require clear service boundaries. Each microservice should encapsulate specific functionality, such as user authentication, product
+catalog, or order processing, to ensure modularity and independence. Here is a simple `architecture diagram`:
+
+![API Architecture Diagram](https://raw.githubusercontent.com/IuraCPersonal/pad-web-proxy/feature/checkpoint-1/public/API-architecture-diagram.png)
+
 ### CONTACT
 
 If you have any question, please contact me through email: `iurie.cius@isa.utm.md`.
