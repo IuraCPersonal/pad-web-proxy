@@ -1,24 +1,27 @@
 # FAF.PAD16.2 Autumn 2023
 
-## LAB 1: WEB PROXY
+## LAB 1: WEB PROXY (CHECKPOINT 01)
 
-##### Handed out: September 4, 2023
+##### Due: September 21/28, 2023
 
-##### Due: October 26, 2023
+### ABOUT THIS BRANCH
 
-### ABOUT THIS REPOSITORY
+This branch contains first checkpoint for the `PAD LAB 1`.
 
-This repository contains homework assignments and laboratory works for the `PAD` course here at `TUM FCIM`.
+### CHECKPOINT TERMS
 
-All the solutions are written in `JS` and `Python`.
+#### Assess Application Suitability - 2p
 
-### PROGRESS
+Here are some reasons why my idea might be relevant for a microservices architecture and real-world examples of well-known projects.
 
-| Week No.      | Status |
-| ------------- | ------ |
-| CHECKPOINT 01 | `NONE` |
-| CHECKPOINT 02 | `NONE` |
-| CHECKPOINT 03 | `NONE` |
+1. **Scalability:** Very often, _Airline Reservation Systems_ need to handle a high level of traffic,
+   especially during peak travel seasons or special events. With the help of _microservices_, we can scale
+   specific components, to handle an increased load in a more efficient way.
+2. **Rapid Development and Deployment**: With the help of _microservices_, we allow teams and developers to develop and deploy
+   individual components independently. This will lead to faster development. `Airbnb` is an example of a company that uses microservices to continuously deploy updates and improvements to its platform.
+3. **Easier Maintenance:** With microservices, you can update and maintain individual components without affecting the entire system.
+4. **Geographic Distribution:** Airlines operate globally, and a distributed system can facilitate geographic distribution. By deploying microservices in different regions or countries, you can reduce latency for users in those areas, providing a better user experience.
+5. **Enhanced Resilience:** By adding microservices, we can build redundancy into critical components, ensuring high availability and disaster recovery. `Uber` uses microservices to maintain service availability even in the face of hardware or software failures.
 
 ### CONTACT
 
