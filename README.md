@@ -28,7 +28,9 @@ Here are some reasons why my idea might be relevant for a microservices architec
 Microservices require clear service boundaries. Each microservice should encapsulate specific functionality, such as user authentication, product
 catalog, or order processing, to ensure modularity and independence. Here is a simple `architecture diagram`:
 
-<!-- ![API Architecture Diagram](https://raw.githubusercontent.com/IuraCPersonal/pad-web-proxy/feature/checkpoint-1/public/API-architecture-diagram.png) -->
+![API Architecture Diagram](https://github.com/IuraCPersonal/pad-web-proxy/blob/feature/checkpoint-1/public/API-architecture-diagram.png)
+
+
 
 #### Choose Technology Stack and Communication Patterns - 2p
 
