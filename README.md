@@ -23,6 +23,8 @@ Here are some reasons why my idea might be relevant for a microservices architec
 4. **Geographic Distribution:** Airlines operate globally, and a distributed system can facilitate geographic distribution. By deploying microservices in different regions or countries, you can reduce latency for users in those areas, providing a better user experience.
 5. **Enhanced Resilience:** By adding microservices, we can build redundancy into critical components, ensuring high availability and disaster recovery. `Uber` uses microservices to maintain service availability even in the face of hardware or software failures.
 
+---
+
 #### Define Service Boundaries - 2p
 
 Microservices require clear service boundaries. Each microservice should encapsulate specific functionality, such as user authentication, product
@@ -30,7 +32,7 @@ catalog, or order processing, to ensure modularity and independence. Here is a s
 
 ![API Architecture Diagram](https://github.com/IuraCPersonal/pad-web-proxy/blob/feature/checkpoint-1/public/API-architecture-diagram.png)
 
-
+---
 
 #### Choose Technology Stack and Communication Patterns - 2p
 
@@ -47,6 +49,8 @@ For this application, I will be using **synchronous communication - REST**. Usin
 - REST can be used with a variety of clients, including web browsers, mobile applications, and third-party integrations. It's suitable for building public APIs that external developers can use.
 - REST relies on a set of well-defined standards, including HTTP methods (GET, POST, PUT, DELETE) and status codes (e.g., 200 for success, 404 for not found). This consistency simplifies the development process.
 - Synchronous communication can be more straightforward to handle in terms of error handling and retries. When a client sends a request, it expects an immediate response, which simplifies error handling compared to asynchronous communication where handling retries and failures can be more complex.
+
+---
 
 #### Design Data Management - 3p
 
@@ -100,6 +104,8 @@ Required:
 | Code | Description | Content                                                               |
 | :--- | :---------- | :-------------------------------------------------------------------- |
 | 400  | Bad Request | `{ error: "Validation failed", details: { field: "error message" } }` |
+
+---
 
 ### CONTACT
 
