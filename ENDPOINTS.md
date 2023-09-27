@@ -9,17 +9,10 @@ Next I will enumerate all the endpoints across all my services and define the da
 Endpoints related to authentication.
 
 <details>
-
 <summary>
-    <code>
-        POST
-    </code>
-    <code>
-        /auth/signup
-    </code>
-    <code>
-        Register User
-    </code>
+    <code>POST</code>
+    <code>/auth/signup</code>
+    <code>Register User</code>
 </summary>
 
 Signup and retrieve an authentication token.
@@ -58,21 +51,13 @@ Required:
 | :--- | :------------------ | :-------------------------------------------------------------------- |
 | 400  | Bad Request         | `{ error: "Validation failed", details: { field: "error message" } }` |
 | 422  | Unprocessable Entry | `{ error : "Email Invalid" }`                                         |
-
 </details>
 
 <details>
-
 <summary>
-    <code>
-        POST
-    </code>
-    <code>
-        /auth/login
-    </code>
-    <code>
-        Login User
-    </code>
+    <code>POST</code>
+    <code>/auth/login</code>
+    <code>Login User</code>
 </summary>
 </details>
 
