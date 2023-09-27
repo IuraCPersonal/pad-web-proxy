@@ -32,6 +32,35 @@ catalog, or order processing, to ensure modularity and independence. Here is a s
 
 ![API Architecture Diagram](https://github.com/IuraCPersonal/pad-web-proxy/blob/feature/checkpoint-1/public/API-architecture-diagram.png)
 
+In my application architecture, I identified three main services: the `Authentication Service`, `Flight Search Service` and `Flight Search Service`. Each having it's own responsabilities and database.
+
+Next is a description of each **service** and its specific functionalities.
+
+1. Authentication
+
+   - **User Authentication:**
+
+     - User Login
+     - Token-Based Authentication
+
+   - **User Registration:**
+     - User Signup
+     - User Profile Creation
+
+2. Flight Search
+
+   - **Search Flights**
+   - **Search Flights by Id**
+   - **Retrieve Flight Details**
+
+3. Flight Booking
+
+   - **Book a Flight**
+   - **Retrieve Booking Details**
+   - **Edit Bxisting Booking**
+   - **Delete Bxisting Booking**
+   - **Retrieve a List of Bookings for Any User**
+
 ---
 
 #### Choose Technology Stack and Communication Patterns - 2p
@@ -63,49 +92,105 @@ I will also have an API gateway that acts as a central entry point for clients t
 
 Next I will enumerate all the endpoints across all my services and define the data to be transferred.
 
-##### Authentication
+| Endpoint                          | Method   | Description                                                                            |
+| --------------------------------- | -------- | -------------------------------------------------------------------------------------- |
+| `/auth/login`                     | `POST`   | Login and retrieve an authentication token                                             |
+| `/auth/signup`                    | `POST`   | Signup and retrieve an authentication token                                            |
+| `/flights/search`                 | `GET`    | Search for flights based on the origin and destination airports                        |
+| `/flights/search?filterBy=filter` | `GET`    | Search for flights based on specific filter                                            |
+| `/flights/{flightId}`             | `GET`    | Retrieve detailed information about that specific flight                               |
+| `/bookings`                       | `POST`   | Create a new flight booking by providing details                                       |
+| `/bookings/{bookingId}`           | `GET`    | Retrieve details about a specific booking by providing the booking ID                  |
+| `/bookings/{bookingId}`           | `PUT`    | Allows users to modify their booking details                                           |
+| `/bookings/{bookingId}`           | `DELETE` | Delete a specific booking by providing the booking ID                                  |
+| `/bookings/user/{userId}`         | `GET`    | Retrieve a list of bookings associated with a specific user by providing their user ID |
 
-Apis related to authentication.
+For a more enhanced description of all the available `endpoints`, please refer to this DOCUMENT.
 
-###### Register User
+Example of how a `flight` object would look like:
 
-Signup and retrieve an authentication token.
+```json
+{
+  "flightId": "FL12345",
+  "airline": "Airline Name",
+  "originAirport": "Origin Airport Code (e.g., JFK)",
+  "destinationAirport": "Destination Airport Code (e.g., LAX)",
+  "departureDateTime": "2023-09-30T08:00:00Z",
+  "arrivalDateTime": "2023-09-30T11:30:00Z",
+  "duration": "3 hours 30 minutes",
+  "availableSeats": 120,
+  "totalSeats": 150,
+  "cabinClass": "Economy",
+  "price": {
+    "amount": 250.0,
+    "currency": "USD"
+  },
+  "layovers": [
+    {
+      "airport": "Connecting Airport Code (if applicable)",
+      "layoverDuration": "2 hours"
+    }
+  ],
+  "flightNumber": "AI123",
+  "aircraftType": "Boeing 737",
+  "status": "Scheduled"
+}
+```
 
-- URL
+And an example of a `booking` object:
 
-`/auth/signup`
+```json
+{
+  "bookingId": "B123456789",
+  "userId": "U123456789",
+  "flights": [
+    {
+      "flightId": "FL12345",
+      "airline": "Airline Name",
+      "departureDateTime": "2023-09-30T08:00:00Z",
+      "arrivalDateTime": "2023-09-30T11:30:00Z",
+      "cabinClass": "Economy",
+      "price": {
+        "amount": 250.0,
+        "currency": "USD"
+      }
+    }
+  ],
+  "passengers": [
+    {
+      "firstName": "John",
+      "lastName": "Doe",
+      "dateOfBirth": "1990-05-15",
+      "gender": "Male"
+    },
+    {
+      "firstName": "Jane",
+      "lastName": "Doe",
+      "dateOfBirth": "1992-08-20",
+      "gender": "Female"
+    }
+  ],
+  "totalPrice": {
+    "amount": 500.0,
+    "currency": "USD"
+  },
+  "status": "Confirmed",
+  "bookingDate": "2023-09-15T10:30:00Z",
+  "paymentMethod": "Credit Card",
+  "paymentStatus": "Paid"
+}
+```
 
-- Method
+#### Set Up Deployment and Scaling - 1p
 
-`POST`
+In this section I will introduce the tools I chose to deploy and scale my microservices. Deploying and scaling microservices efficiently is crucial for maintaining the reliability and availability of my application. Here's a high-level plan on how I will use Docker and Kubernetes for this purpose:
 
-- URL Params
-
-`None`
-
-- Data Params
-
-Required:
-
-`username` (string, unique): The username chosen by the user for authentication.
-
-`email` (string, unique): The user's email address for communication and account recovery.
-
-`password` (string): The user's chosen password for authentication.
-
-- Success Respone
-
-| Code | Description | Content                                                                       |
-| :--- | :---------- | :---------------------------------------------------------------------------- |
-| 201  | Created     | `{"message": "User registered successfully", "token": "the.jwt.token.here" }` |
-
-- Error Response
-
-| Code | Description | Content                                                               |
-| :--- | :---------- | :-------------------------------------------------------------------- |
-| 400  | Bad Request | `{ error: "Validation failed", details: { field: "error message" } }` |
-
----
+1. I will go with **Containerization with Docker**.
+   - Docker allows to package each microservice and its dependencies into a lightweight, isolated container. This provides consistency in deployment across different environments (development, testing, production) and simplifies the packaging and distribution of microservices.
+   - It allows create a Dockerfile for each microservice, specifying its runtime environment, dependencies, and how it should start. Build Docker images for each microservice.
+2. Orchestration with Kubernetes (barely know how to)
+   - It will help automate deployment, scaling, and management of containerized applications.
+   - Set up a Kubernetes cluster, which consists of a master node and multiple worker nodes.
 
 ### CONTACT
 
