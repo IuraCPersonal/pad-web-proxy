@@ -100,18 +100,18 @@ I will also have an API gateway that acts as a central entry point for clients t
 
 Next I will enumerate all the endpoints across all my services and define the data to be transferred.
 
-| Endpoint                          | Method   | Description                                                                            |
-| --------------------------------- | -------- | -------------------------------------------------------------------------------------- |
-| `/auth/login`                     | `POST`   | Login and retrieve an authentication token                                             |
-| `/auth/signup`                    | `POST`   | Signup and retrieve an authentication token                                            |
-| `/flights/search`                 | `GET`    | Search for flights based on the origin and destination airports                        |
-| `/flights/search?filterBy=filter` | `GET`    | Search for flights based on specific filter                                            |
-| `/flights/{flightId}`             | `GET`    | Retrieve detailed information about that specific flight                               |
-| `/bookings`                       | `POST`   | Create a new flight booking by providing details                                       |
-| `/bookings/{bookingId}`           | `GET`    | Retrieve details about a specific booking by providing the booking ID                  |
-| `/bookings/{bookingId}`           | `PUT`    | Allows users to modify their booking details                                           |
-| `/bookings/{bookingId}`           | `DELETE` | Delete a specific booking by providing the booking ID                                  |
-| `/bookings/user/{userId}`         | `GET`    | Retrieve a list of bookings associated with a specific user by providing their user ID |
+| Endpoint                              | Method   | Description                                                                            |
+| ------------------------------------- | -------- | -------------------------------------------------------------------------------------- |
+| `/api/auth/login`                     | `POST`   | Login and retrieve an authentication token                                             |
+| `/api/auth/signup`                    | `POST`   | Signup and retrieve an authentication token                                            |
+| `/api/flights/search`                 | `GET`    | Search for flights based on the origin and destination airports                        |
+| `/api/flights/search?filterBy=filter` | `GET`    | Search for flights based on specific filter                                            |
+| `/api/flights/{flightId}`             | `GET`    | Retrieve detailed information about that specific flight                               |
+| `/api/bookings`                       | `POST`   | Create a new flight booking by providing details                                       |
+| `/api/bookings/{bookingId}`           | `GET`    | Retrieve details about a specific booking by providing the booking ID                  |
+| `/api/bookings/{bookingId}`           | `PUT`    | Allows users to modify their booking details                                           |
+| `/api/bookings/{bookingId}`           | `DELETE` | Delete a specific booking by providing the booking ID                                  |
+| `/api/bookings/user/{userId}`         | `GET`    | Retrieve a list of bookings associated with a specific user by providing their user ID |
 
 For a more enhanced description of all the available `endpoints`, please refer to this DOCUMENT.
 
