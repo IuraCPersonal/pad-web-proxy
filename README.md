@@ -113,7 +113,7 @@ Next I will enumerate all the endpoints across all my services and define the da
 | `/api/bookings/{bookingId}`           | `DELETE` | Delete a specific booking by providing the booking ID                                  |
 | `/api/bookings/user/{userId}`         | `GET`    | Retrieve a list of bookings associated with a specific user by providing their user ID |
 
-For a more enhanced description of all the available `endpoints`, please refer to this DOCUMENT.
+For a more enhanced description of all the available `endpoints`, please refer to this [DOCUMENT](https://github.com/IuraCPersonal/pad-web-proxy/blob/feature/checkpoint-1/ENDPOINTS.md).
 
 Example of how a `flight` object would look like:
 

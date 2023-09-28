@@ -9,7 +9,6 @@ Next I will enumerate all the endpoints across all my services and define the da
 Endpoints related to authentication.
 
 <details>
-
 <summary>
     <code>POST</code>
     <code>/api/auth/signup</code>
@@ -56,7 +55,6 @@ Required:
 </details>
 
 <details>
-
 <summary>
     <code>POST</code>
     <code>/api/auth/login</code>
