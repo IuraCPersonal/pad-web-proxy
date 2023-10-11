@@ -5,7 +5,9 @@ import { Logger } from 'nestjs-pino';
 
 async function bootstrap() {
   const app = await NestFactory.create(ReservationsModule);
-  app.useGlobalPipes(new ValidationPipe());
+  // whitelist - If set to true validator will strip validated object
+  // of any properties that do not have any decorators
+  app.useGlobalPipes(new ValidationPipe({ whitelist: true }));
   app.useLogger(app.get(Logger));
   await app.listen(3000);
 }
