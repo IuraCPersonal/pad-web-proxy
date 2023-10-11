@@ -6,13 +6,7 @@ import {
 import * as Joi from 'joi';
 
 @Module({
-  imports: [
-    NestConfigModule.forRoot({
-      validationSchema: Joi.object({
-        MONGODB_URI: Joi.string().required(),
-      }),
-    }),
-  ],
+  imports: [NestConfigModule.forRoot()],
   providers: [ConfigService],
   exports: [ConfigService],
 })
