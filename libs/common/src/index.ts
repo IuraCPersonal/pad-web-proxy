@@ -5,3 +5,5 @@ export * from './constants';
 export * from './decorators';
 export * from './dto';
 export * from './health';
+export * from './models';
+export * from './timeout';

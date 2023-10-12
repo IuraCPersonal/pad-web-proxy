@@ -23,12 +23,15 @@ export class ReservationsController {
     @Body() createReservationDto: CreateReservationDto,
     @CurrentUser() user: UserDto,
   ) {
+    // TEST TIMEOUTS HERE
+    // await new Promise((r) => setTimeout(r, 5000));
+
     const _user = await this.reservationsService.create(
       createReservationDto,
       user._id,
     );
 
-    console.log(_user);
+    // console.log(_user);
 
     return _user;
   }

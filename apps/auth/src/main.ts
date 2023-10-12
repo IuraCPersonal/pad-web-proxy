@@ -5,11 +5,16 @@ import { Logger } from 'nestjs-pino';
 import { ConfigService } from '@nestjs/config';
 import * as cookieParser from 'cookie-parser';
 import { Transport } from '@nestjs/microservices';
+import { TimeoutInterceptor } from '@app/common';
 
 async function bootstrap() {
   const app = await NestFactory.create(AuthModule);
   const configService = app.get(ConfigService);
+  const timeoutInMiliseconds: number = parseInt(
+    configService.get<any>('TIMEOUT_IN_MILISECONDS', 3000),
+  );
 
+  app.useGlobalInterceptors(new TimeoutInterceptor(timeoutInMiliseconds));
   app.connectMicroservice({
     transport: Transport.TCP,
     options: {
