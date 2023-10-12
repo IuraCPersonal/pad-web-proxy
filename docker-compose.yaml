@@ -19,5 +19,14 @@ services:
       - './apps/auth/.env'
     ports:
       - '3001:3001'
+  # gateway:
+  #   build:
+  #     context: ./gateway
+  #     dockerfile: ./Dockerfile
+  #   ports:
+  #     - '8080:8080'
+  #   depends_on:
+  #     - reservations
+  #     - auth
   mongo:
     image: mongo
