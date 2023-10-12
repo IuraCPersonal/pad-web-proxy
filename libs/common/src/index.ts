@@ -7,3 +7,4 @@ export * from './dto';
 export * from './health';
 export * from './models';
 export * from './timeout';
+export * from './throttler';

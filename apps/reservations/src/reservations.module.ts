@@ -6,6 +6,7 @@ import {
   HealthModule,
   LoggerModule,
   AUTH_SERVICE,
+  ThrottlerGuardModule,
 } from '@app/common';
 import { ReservationsRepository } from './reservations.repository';
 import {
@@ -44,6 +45,7 @@ import { ClientsModule, Transport } from '@nestjs/microservices';
       },
     ]),
     HealthModule,
+    ThrottlerGuardModule,
   ],
   controllers: [ReservationsController],
   providers: [ReservationsService, ReservationsRepository],
