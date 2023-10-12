@@ -14,7 +14,7 @@
 
 ### ABOUT THIS BRANCH
 
-This branch contains first checkpoint for the `PAD LAB 1`.
+This branch contains second checkpoint for the `PAD LAB 1`.
 
 ### CHECKPOINT TERMS
 
