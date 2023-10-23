@@ -40,3 +40,5 @@ services:
   #     - auth
   mongo:
     image: mongo
+    logging:
+      driver: none
