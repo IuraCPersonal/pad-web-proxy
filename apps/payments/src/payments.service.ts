@@ -23,11 +23,4 @@ export class PaymentsService {
 
     return paymentIntent;
   }
-
-  // async confirmPayment() {
-  //   return await this.stripe.paymentIntents.confirm(
-  //     'pm_1O2clsASgkaFpyQQdVNVDgWz',
-  //     { payment_method: 'pm_card_visa' },
-  //   );
-  // }
 }

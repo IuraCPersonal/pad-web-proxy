@@ -3,7 +3,7 @@ syntax = "proto3";
 package payments;
 
 service PaymentsService {
-    rpc CreatePayment (CreatePaymentMessage) return (CreatePaymentsResponse) {}
+    rpc CreatePayment (CreatePaymentMessage) returns (CreatePaymentsResponse) {}
 }
 
 message CreatePaymentMessage {
