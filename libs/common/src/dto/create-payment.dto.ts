@@ -6,8 +6,9 @@ import {
 } from 'class-validator';
 import { CardDto } from './card.dto';
 import { Type } from 'class-transformer';
+import { CreatePaymentMessage } from '../types';
 
-export class CreatePaymentDto {
+export class CreatePaymentDto implements CreatePaymentMessage {
   @IsDefined()
   @IsNotEmpty()
   @ValidateNested()

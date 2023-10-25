@@ -8,3 +8,4 @@ export * from './health';
 export * from './models';
 export * from './timeout';
 export * from './throttler';
+export * from './types';
