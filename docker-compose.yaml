@@ -44,7 +44,13 @@ services:
   #   depends_on:
   #     - reservations
   #     - auth
-  mongo:
+  reservations-db:
     image: mongo
+    command: mongod --quiet --logpath /dev/null
+    logging:
+      driver: none
+  auth-db:
+    image: mongo
+    command: mongod --quiet --logpath /dev/null
     logging:
       driver: none

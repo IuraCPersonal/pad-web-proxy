@@ -11,6 +11,7 @@ auth = "http://localhost:3001"
 
 headers = {"Content-Type": "application/json"}
 
+
 class JWT:
     def __init__(self):
         self.token = ""
@@ -20,8 +21,10 @@ class JWT:
 
     def get(self):
         return self.token
-    
+
+
 token = JWT()
+
 
 @app.get("/reservations")
 async def health():
@@ -29,15 +32,19 @@ async def health():
 
     return r.json()
 
+
 @app.get("/reservations/reservations")
 async def get_reservations():
-    r = httpx.get(f"{reservations}/reservations", cookies={"Authentication": token.get()})
+    r = httpx.get(f"{reservations}/reservations",
+                  cookies={"Authentication": token.get()})
 
     return r.json()
 
+
 @app.post("/auth/login", response_model=User)
 async def get(payload: User):
-    r = httpx.post(f"{auth}/auth/login", json=jsonable_encoder(payload), headers=headers)
+    r = httpx.post(f"{auth}/auth/login",
+                   json=jsonable_encoder(payload), headers=headers)
     token.set(r.cookies.get("Authentication"))
 
     return r.json()
