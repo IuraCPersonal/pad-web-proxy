@@ -21,10 +21,6 @@ export class CreateReservationDto {
   @IsNotEmpty()
   flightId: string;
 
-  @IsString()
-  @IsNotEmpty()
-  invoiceId: string;
-
   @IsDefined()
   @IsNotEmpty()
   @ValidateNested()

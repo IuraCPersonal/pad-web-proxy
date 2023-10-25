@@ -14,12 +14,7 @@ export class PaymentsService {
 
   constructor(private readonly configService: ConfigService) {}
 
-  async createPayment({ card, amount }: CreatePaymentDto) {
-    console.log(
-      '🚀 ~ file: payments.service.ts:18 ~ PaymentsService ~ createPayment ~ card:',
-      card,
-    );
-
+  async createPayment({ amount }: CreatePaymentDto) {
     const paymentIntent = await this.stripe.paymentIntents.create({
       amount: amount * 100,
       currency: 'usd',
@@ -29,10 +24,10 @@ export class PaymentsService {
     return paymentIntent;
   }
 
-  async confirmPayment() {
-    return await this.stripe.paymentIntents.confirm(
-      'pm_1O2clsASgkaFpyQQdVNVDgWz',
-      { payment_method: 'pm_card_visa' },
-    );
-  }
+  // async confirmPayment() {
+  //   return await this.stripe.paymentIntents.confirm(
+  //     'pm_1O2clsASgkaFpyQQdVNVDgWz',
+  //     { payment_method: 'pm_card_visa' },
+  //   );
+  // }
 }
