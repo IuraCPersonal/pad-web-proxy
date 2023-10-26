@@ -54,4 +54,8 @@ export class ReservationsService implements OnModuleInit {
   async remove(_id: string) {
     return this.reservationsRepository.findOneAndDelete({ _id });
   }
+
+  async simulate_failure() {
+    throw new Error('Simulated server error');
+  }
 }

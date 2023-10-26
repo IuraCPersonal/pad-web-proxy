@@ -11,8 +11,8 @@ export class CircuitBreakerService {
   private state: CircuitState = CircuitState.Closed;
   private consecutiveFailures = 0;
 
-  private readonly failureThreshold = 3; // Number of failures to trigger the circuit open
-  private readonly resetTimeout = 50000; // Time in milliseconds to wait before attempting to close the circuit
+  private readonly failureThreshold = 1; // Number of failures to trigger the circuit open
+  private readonly resetTimeout = 500000; // Time in milliseconds to wait before attempting to close the circuit
 
   async executeWithCircuitBreaker<T>(fn: () => Promise<T>): Promise<T> {
     switch (this.state) {
@@ -29,6 +29,7 @@ export class CircuitBreakerService {
               this.state = CircuitState.HalfOpen;
             }, this.resetTimeout);
           }
+
           throw error;
         }
       case CircuitState.Open:

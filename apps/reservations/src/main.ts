@@ -18,7 +18,7 @@ async function bootstrap() {
     await axios.post(configService.get('SERVICE_DISCOVERY_URL'), {
       name: configService.get('SELF_NAME'),
       host: configService.get('SELF_HOST'),
-      port: configService.get('SELF_PORT'),
+      port: configService.get('PORT'),
       type: 'reservations',
     });
   } catch (error) {

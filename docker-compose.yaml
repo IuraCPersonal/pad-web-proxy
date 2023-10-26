@@ -1,5 +1,7 @@
 services:
-  reservations:
+  reservations-1:
+    hostname: reservations-1
+    container_name: reservations-1
     build:
       context: .
       dockerfile: ./apps/reservations/Dockerfile
@@ -10,7 +12,7 @@ services:
     environment:
       - SELF_NAME=reservations-1
       - SELF_HOST=reservations-1
-      - SELF_PORT=3001
+      - PORT=3000
     ports:
       - '3000:3000'
     volumes:
@@ -18,35 +20,56 @@ services:
     depends_on:
       - service-discovery
 
-  auth:
+  reservations-2:
+    hostname: reservations-2
+    container_name: reservations-2
     build:
       context: .
-      dockerfile: ./apps/auth/Dockerfile
+      dockerfile: ./apps/reservations/Dockerfile
       target: development
-    command: pnpm run start:dev auth
+    command: pnpm run start:dev reservations
     env_file:
-      - './apps/auth/.env'
+      - './apps/reservations/.env'
+    environment:
+      - SELF_NAME=reservations-2
+      - SELF_HOST=reservations-2
+      - PORT=4000
     ports:
-      - '3001:3001'
+      - '4000:4000'
     volumes:
       - .:/usr/src/app
     depends_on:
       - service-discovery
 
-  payments:
-    build:
-      context: .
-      dockerfile: ./apps/payments/Dockerfile
-      target: development
-    command: pnpm run start:dev payments
-    env_file:
-      - './apps/payments/.env'
-    ports:
-      - '3003:3003'
-    volumes:
-      - .:/usr/src/app
-    depends_on:
-      - service-discovery
+  # auth:
+  #   build:
+  #     context: .
+  #     dockerfile: ./apps/auth/Dockerfile
+  #     target: development
+  #   command: pnpm run start:dev auth
+  #   env_file:
+  #     - './apps/auth/.env'
+  #   ports:
+  #     - '3001:3001'
+  #   volumes:
+  #     - .:/usr/src/app
+  #   depends_on:
+  #     - service-discovery
+
+  # payments:
+  #   build:
+  #     context: .
+  #     dockerfile: ./apps/payments/Dockerfile
+  #     target: development
+  #   command: pnpm run start:dev payments
+  #   env_file:
+  #     - './apps/payments/.env'
+  #   ports:
+  #     - '3003:3003'
+  #   volumes:
+  #     - .:/usr/src/app
+  #   depends_on:
+  #     - service-discovery
 
   gateway:
     build:
@@ -54,6 +77,9 @@ services:
       dockerfile: ./Dockerfile
     ports:
       - '8888:8888'
+    depends_on:
+      - redis-cache
+      - service-discovery
 
   service-discovery:
     build:
@@ -62,13 +88,26 @@ services:
     ports:
       - '7777:7777'
 
+  redis-cache:
+    image: redis:alpine
+    hostname: redis-cache
+    container_name: redis-cache
+    restart: on-failure
+    ports:
+      - '6379:6379'
+    command: redis-server
+    volumes:
+      - .:/usr/src/app
+    depends_on:
+      - service-discovery
+
   reservations-db:
     image: mongo
     command: mongod --quiet --logpath /dev/null
     logging:
       driver: none
-  auth-db:
-    image: mongo
-    command: mongod --quiet --logpath /dev/null
-    logging:
-      driver: none
+  # auth-db:
+  #   image: mongo
+  #   command: mongod --quiet --logpath /dev/null
+  #   logging:
+  #     driver: none

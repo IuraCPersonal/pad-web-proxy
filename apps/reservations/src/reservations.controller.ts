@@ -22,7 +22,7 @@ export class ReservationsController {
   ) {}
 
   @Post()
-  @UseGuards(JwtAuthGuard)
+  // @UseGuards(JwtAuthGuard)
   async create(
     @Body() createReservationDto: CreateReservationDto,
     @CurrentUser() user: UserDto,
@@ -43,7 +43,7 @@ export class ReservationsController {
   }
 
   @Get()
-  @UseGuards(JwtAuthGuard)
+  // @UseGuards(JwtAuthGuard)
   async findAll() {
     return this.reservationsService.findAll();
   }
@@ -51,18 +51,18 @@ export class ReservationsController {
   @Get('/simulate-failure')
   async simulateFailure() {
     return this.circuitBreakerService.executeWithCircuitBreaker(async () => {
-      throw new Error('Simulated server error');
+      return this.reservationsService.simulate_failure()
     });
   }
 
   @Get(':id')
-  @UseGuards(JwtAuthGuard)
+  // @UseGuards(JwtAuthGuard)
   async findOne(@Param('id') id: string) {
     return this.reservationsService.findOne(id);
   }
 
   @Patch(':id')
-  @UseGuards(JwtAuthGuard)
+  // @UseGuards(JwtAuthGuard)
   async update(
     @Param('id') id: string,
     @Body() updateReservationDto: UpdateReservationDto,
@@ -71,7 +71,7 @@ export class ReservationsController {
   }
 
   @Delete(':id')
-  @UseGuards(JwtAuthGuard)
+  // @UseGuards(JwtAuthGuard)
   async remove(@Param('id') id: string) {
     return this.reservationsService.remove(id);
   }

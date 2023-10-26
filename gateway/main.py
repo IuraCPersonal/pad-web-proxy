@@ -1,35 +1,68 @@
 import os
-
+import json
 import httpx
 import redis
+import logging
+import functools
+import datetime
 
-from fastapi import FastAPI, status
-from fastapi.responses import JSONResponse
-from fastapi.encoders import jsonable_encoder
-
-from pybreaker import CircuitBreaker, CircuitRedisStorage, STATE_CLOSED
+from httpx import ConnectError
+from fastapi import FastAPI, HTTPException, status, Depends
 
 from models.user import User
 from models.health import HealthCheck
 
-app = FastAPI()
+################ LOGGING ################
 
-redis = redis.StrictRedis()
-db_breaker = CircuitBreaker(
-    fail_max=5,
-    reset_timeout=60,
-    state_storage=CircuitRedisStorage(STATE_CLOSED, redis)
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(asctime)s,%(msecs)d %(levelname)s: %(message)s",
+    datefmt="%H:%M:%S",
 )
 
-REDIS_HOST = os.getenv('REDIS_HOST') or "redis-cache"
-REDIS_PORT = os.getenv('REDIS_PORT') or 6379
+################ REDIS ################
+
+
+def create_redis():
+    return redis.ConnectionPool(
+        host="redis-cache",
+        port=6379,
+        db=0,
+        decode_responses=True
+    )
+
+
+pool = create_redis()
 
 
 def cache():
-    return redis.Redis(
-        host=REDIS_HOST,
-        port=REDIS_PORT
-    )
+    return redis.Redis(connection_pool=pool)
+
+################ LOAD BALANCER ################
+
+
+reservations_service_counter = 0
+payments_service_counter = 0
+
+
+def getNextReservationsReplica():
+    global reservations_service_counter
+    replicas = httpx.get('http://service-discovery:7777/services').json()
+
+    targets = replicas["reservations"]
+
+    print(targets)
+
+    reservations_service_counter = reservations_service_counter % len(targets)
+    next_service = targets[reservations_service_counter]
+    reservations_service_counter += 1
+
+    return f"http://{next_service['host']}:{next_service['port']}"
+
+################ SERVICE ################
+
+
+app = FastAPI()
 
 
 @app.get(
@@ -70,8 +103,26 @@ async def login(credentials):
 @app.get(
     "/reservations"
 )
-async def get_reservations():
-    return 200
+async def get_reservations(
+    redis_client: cache = Depends(cache),
+):
+    try:
+        if (cached_reservations := redis_client.get("reservations")) is not None:
+            return json.loads(cached_reservations)
+
+        instance_url = getNextReservationsReplica()
+
+        res = httpx.get(instance_url + "/reservations")
+
+        if res.status_code != 200:
+            raise HTTPException(status_code=res.status_code, detail=res.text)
+
+        redis_client.set("reservations", json.dumps(
+            res.json()), ex=datetime.timedelta(minutes=1))
+
+        return res.json()
+    except ConnectError:
+        raise HTTPException(status_code=500, detail="Request timeout.")
 
 
 @app.post(
