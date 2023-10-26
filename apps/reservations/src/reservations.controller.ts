@@ -12,44 +12,57 @@ import { ReservationsService } from './reservations.service';
 import { CreateReservationDto } from './dto/create-reservation.dto';
 import { UpdateReservationDto } from './dto/update-reservation.dto';
 import { CurrentUser, JwtAuthGuard, UserDto } from '@app/common';
+import { CircuitBreakerService } from '@app/common/circuit-breaker/circuit-breaker.service';
 
 @Controller('reservations')
 export class ReservationsController {
-  constructor(private readonly reservationsService: ReservationsService) {}
+  constructor(
+    private readonly reservationsService: ReservationsService,
+    private readonly circuitBreakerService: CircuitBreakerService,
+  ) {}
 
   @Post()
-  @UseGuards(JwtAuthGuard)
+  // @UseGuards(JwtAuthGuard)
   async create(
     @Body() createReservationDto: CreateReservationDto,
     @CurrentUser() user: UserDto,
   ) {
-    // TEST TIMEOUTS HERE
-    // await new Promise((r) => setTimeout(r, 5000));
+    return this.circuitBreakerService.executeWithCircuitBreaker(async () => {
+      // TEST TIMEOUTS HERE
+      // await new Promise((r) => setTimeout(r, 5000));
 
-    const _user = await this.reservationsService.create(
-      createReservationDto,
-      user._id,
-    );
+      const _user = await this.reservationsService.create(
+        createReservationDto,
+        user._id,
+      );
 
-    // console.log(_user);
+      // console.log(_user);
 
-    return _user;
+      return _user;
+    });
   }
 
   @Get()
-  @UseGuards(JwtAuthGuard)
+  // @UseGuards(JwtAuthGuard)
   async findAll() {
     return this.reservationsService.findAll();
   }
 
+  @Get('/simulate-failure')
+  async simulateFailure() {
+    return this.circuitBreakerService.executeWithCircuitBreaker(async () => {
+      return this.reservationsService.simulate_failure()
+    });
+  }
+
   @Get(':id')
-  @UseGuards(JwtAuthGuard)
+  // @UseGuards(JwtAuthGuard)
   async findOne(@Param('id') id: string) {
     return this.reservationsService.findOne(id);
   }
 
   @Patch(':id')
-  @UseGuards(JwtAuthGuard)
+  // @UseGuards(JwtAuthGuard)
   async update(
     @Param('id') id: string,
     @Body() updateReservationDto: UpdateReservationDto,
@@ -58,7 +71,7 @@ export class ReservationsController {
   }
 
   @Delete(':id')
-  @UseGuards(JwtAuthGuard)
+  // @UseGuards(JwtAuthGuard)
   async remove(@Param('id') id: string) {
     return this.reservationsService.remove(id);
   }

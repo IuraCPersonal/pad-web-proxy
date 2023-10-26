@@ -5,6 +5,7 @@ import { Logger } from 'nestjs-pino';
 import { ConfigService } from '@nestjs/config';
 import * as cookieParser from 'cookie-parser';
 import { TimeoutInterceptor } from '@app/common';
+import axios from 'axios';
 
 async function bootstrap() {
   const app = await NestFactory.create(ReservationsModule);
@@ -12,6 +13,17 @@ async function bootstrap() {
   const timeoutInMiliseconds: number = parseInt(
     configService.get<any>('TIMEOUT_IN_MILISECONDS', 3000),
   );
+
+  try {
+    await axios.post(configService.get('SERVICE_DISCOVERY_URL'), {
+      name: configService.get('SELF_NAME'),
+      host: configService.get('SELF_HOST'),
+      port: configService.get('PORT'),
+      type: 'reservations',
+    });
+  } catch (error) {
+    console.error('Failed to register service:', error);
+  }
 
   // whitelist - If set to true validator will strip validated object
   // of any properties that do not have any decorators

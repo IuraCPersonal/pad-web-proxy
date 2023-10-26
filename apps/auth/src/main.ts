@@ -5,7 +5,8 @@ import { Logger } from 'nestjs-pino';
 import { ConfigService } from '@nestjs/config';
 import * as cookieParser from 'cookie-parser';
 import { Transport } from '@nestjs/microservices';
-import { TimeoutInterceptor } from '@app/common';
+import { AUTH_PACKAGE_NAME, TimeoutInterceptor } from '@app/common';
+import { join } from 'path';
 
 async function bootstrap() {
   const app = await NestFactory.create(AuthModule);
@@ -16,10 +17,11 @@ async function bootstrap() {
 
   app.useGlobalInterceptors(new TimeoutInterceptor(timeoutInMiliseconds));
   app.connectMicroservice({
-    transport: Transport.TCP,
+    transport: Transport.GRPC,
     options: {
-      host: '0.0.0.0',
-      port: configService.get('TCP_PORT'),
+      package: AUTH_PACKAGE_NAME,
+      protoPath: join(__dirname, '../../../proto/auth.proto'),
+      url: configService.getOrThrow('AUTH_GRPC_URL'),
     },
   });
   app.use(cookieParser());
