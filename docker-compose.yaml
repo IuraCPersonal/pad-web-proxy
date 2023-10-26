@@ -7,10 +7,17 @@ services:
     command: pnpm run start:dev reservations
     env_file:
       - './apps/reservations/.env'
+    environment:
+      - SELF_NAME=reservations-1
+      - SELF_HOST=reservations-1
+      - SELF_PORT=3001
     ports:
       - '3000:3000'
     volumes:
       - .:/usr/src/app
+    depends_on:
+      - service-discovery
+
   auth:
     build:
       context: .
@@ -23,6 +30,9 @@ services:
       - '3001:3001'
     volumes:
       - .:/usr/src/app
+    depends_on:
+      - service-discovery
+
   payments:
     build:
       context: .
@@ -35,15 +45,23 @@ services:
       - '3003:3003'
     volumes:
       - .:/usr/src/app
-  # gateway:
-  #   build:
-  #     context: ./gateway
-  #     dockerfile: ./Dockerfile
-  #   ports:
-  #     - '8080:8080'
-  #   depends_on:
-  #     - reservations
-  #     - auth
+    depends_on:
+      - service-discovery
+
+  gateway:
+    build:
+      context: ./gateway
+      dockerfile: ./Dockerfile
+    ports:
+      - '8888:8888'
+
+  service-discovery:
+    build:
+      context: ./service_discovery
+      dockerfile: ./Dockerfile
+    ports:
+      - '7777:7777'
+
   reservations-db:
     image: mongo
     command: mongod --quiet --logpath /dev/null

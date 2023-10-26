@@ -12,10 +12,14 @@ import { ReservationsService } from './reservations.service';
 import { CreateReservationDto } from './dto/create-reservation.dto';
 import { UpdateReservationDto } from './dto/update-reservation.dto';
 import { CurrentUser, JwtAuthGuard, UserDto } from '@app/common';
+import { CircuitBreakerService } from '@app/common/circuit-breaker/circuit-breaker.service';
 
 @Controller('reservations')
 export class ReservationsController {
-  constructor(private readonly reservationsService: ReservationsService) {}
+  constructor(
+    private readonly reservationsService: ReservationsService,
+    private readonly circuitBreakerService: CircuitBreakerService,
+  ) {}
 
   @Post()
   @UseGuards(JwtAuthGuard)
@@ -23,23 +27,32 @@ export class ReservationsController {
     @Body() createReservationDto: CreateReservationDto,
     @CurrentUser() user: UserDto,
   ) {
-    // TEST TIMEOUTS HERE
-    // await new Promise((r) => setTimeout(r, 5000));
+    return this.circuitBreakerService.executeWithCircuitBreaker(async () => {
+      // TEST TIMEOUTS HERE
+      // await new Promise((r) => setTimeout(r, 5000));
 
-    const _user = await this.reservationsService.create(
-      createReservationDto,
-      user._id,
-    );
+      const _user = await this.reservationsService.create(
+        createReservationDto,
+        user._id,
+      );
 
-    // console.log(_user);
+      // console.log(_user);
 
-    return _user;
+      return _user;
+    });
   }
 
   @Get()
   @UseGuards(JwtAuthGuard)
   async findAll() {
     return this.reservationsService.findAll();
+  }
+
+  @Get('/simulate-failure')
+  async simulateFailure() {
+    return this.circuitBreakerService.executeWithCircuitBreaker(async () => {
+      throw new Error('Simulated server error');
+    });
   }
 
   @Get(':id')

@@ -9,3 +9,4 @@ export * from './models';
 export * from './timeout';
 export * from './throttler';
 export * from './types';
+export * from './circuit-breaker';
