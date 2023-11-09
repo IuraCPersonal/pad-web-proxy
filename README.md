@@ -33,7 +33,7 @@ This branch contains first checkpoint for the `PAD LAB 2`.
 Microservices require clear service boundaries. Each microservice should encapsulate specific functionality, such as user authentication, product
 catalog, or order processing, to ensure modularity and independence. Here is a simple `architecture diagram`:
 
-<!-- ![API Architecture Diagram](https://github.com/IuraCPersonal/pad-web-proxy/blob/feature/checkpoint-1/public/API-architecture-diagram.png) -->
+![API Architecture Diagram](https://github.com/IuraCPersonal/pad-web-proxy/blob/feature/checkpoint-4/public/API-architecture-diagram.png)
 
 In my application architecture, I identified three main services: the `Authentication Service`, `Flight Search Service` and `Flight Search Service`. Each having it's own responsabilities and database.
 
