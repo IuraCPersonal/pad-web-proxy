@@ -21,6 +21,37 @@ export class ReservationsService implements OnModuleInit {
     );
   }
 
+  //   async create(createReservationDto: CreateReservationDto, userId: string) {
+  //   // Phase 1: Prepare
+  //   // Start a transaction in the reservations service
+  //   const reservationTransaction = await this.reservationsRepository.startTransaction();
+
+  //   // Prepare the reservation
+  //   const reservation = this.reservationsRepository.create({
+  //     ...createReservationDto,
+  //     timestamp: new Date(),
+  //     userId,
+  //   });
+
+  //   // Save the reservation in the database, but don't commit the transaction yet
+  //   await this.reservationsRepository.save(reservation, { session: reservationTransaction });
+
+  //   // Prepare the payment
+  //   const payment = await this.paymentsService.createPayment(createReservationDto.payment);
+
+  //   // Phase 2: Commit or Rollback
+  //   if (payment.status === 'success') {
+  //     // If the payment was successful, commit the reservation transaction
+  //     await reservationTransaction.commit();
+  //     reservation.invoiceId = payment.id;
+  //     return reservation;
+  //   } else {
+  //     // If the payment failed, rollback the reservation transaction
+  //     await reservationTransaction.rollback();
+  //     throw new Error('Payment failed');
+  //   }
+  // }
+
   async create(createReservationDto: CreateReservationDto, userId: string) {
     return this.paymentsService
       .createPayment(createReservationDto.payment)

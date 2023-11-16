@@ -15,10 +15,7 @@ export class CircuitBreakerService {
   private readonly failureThreshold = 3; // Number of failures to trigger the circuit open
   private readonly resetTimeout = 5000; // Time in milliseconds to wait before attempting to close the circuit
 
-  async executeWithCircuitBreaker<T>(
-    fn: () => Promise<T>,
-    fallback: () => T,
-  ): Promise<T> {
+  async executeWithCircuitBreaker<T>(fn: () => Promise<T>): Promise<T> {
     switch (this.state) {
       case CircuitState.Closed:
         try {
@@ -40,7 +37,7 @@ export class CircuitBreakerService {
           console.log('Circuit half-open');
         } else {
           console.log('Circuit open, executing fallback function');
-          return fallback();
+          // return fallback();
         }
       // intentional fallthrough
       case CircuitState.HalfOpen:

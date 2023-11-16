@@ -51,7 +51,7 @@ export class ReservationsController {
   @Get('/simulate-failure')
   async simulateFailure() {
     return this.circuitBreakerService.executeWithCircuitBreaker(async () => {
-      return this.reservationsService.simulate_failure()
+      return this.reservationsService.simulate_failure();
     });
   }
 
