@@ -1,4 +1,5 @@
 import os
+import time
 import json
 import httpx
 import redis
@@ -11,6 +12,8 @@ from fastapi import FastAPI, HTTPException, status, Depends
 
 from models.user import User
 from models.health import HealthCheck
+
+MAX_RETRIES = 3
 
 ################ LOGGING ################
 
@@ -100,30 +103,31 @@ async def login(credentials):
     return 200
 
 
-@app.get(
-    "/reservations"
-)
-async def get_reservations(
-    redis_client: cache = Depends(cache),
+@app.get("/reservations")
+def get_reservations(
+    redis_client: redis.Redis = Depends(cache)
 ):
-    try:
-        if (cached_reservations := redis_client.get("reservations")) is not None:
-            return json.loads(cached_reservations)
+    for i in range(MAX_RETRIES):
+        try:
+            if (cached_reservations := redis_client.get("reservations")) is not None:
+                return json.loads(cached_reservations)
 
-        instance_url = getNextReservationsReplica()
+            instance_url = getNextReservationsReplica()
 
-        res = httpx.get(instance_url + "/reservations")
+            res = httpx.get(instance_url + "/reservations")
 
-        if res.status_code != 200:
-            raise HTTPException(status_code=res.status_code, detail=res.text)
+            if res.status_code != 200:
+                raise HTTPException(status_code=res.status_code, detail=res.text)
 
-        redis_client.set("reservations", json.dumps(
-            res.json()), ex=datetime.timedelta(minutes=1))
+            redis_client.set("reservations", json.dumps(res.json()), ex=datetime.timedelta(minutes=1))
 
-        return res.json()
-    except ConnectError:
-        raise HTTPException(status_code=500, detail="Request timeout.")
-
+            return res.json()
+        except (ConnectError, httpx.HTTPError):
+            if i < MAX_RETRIES - 1:  # i is zero indexed
+                time.sleep(1)  # wait a bit before retrying
+                continue
+            else:
+                raise HTTPException(status_code=500, detail="Request timeout.")
 
 @app.post(
     "/reservations"
