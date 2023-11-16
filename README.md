@@ -8,37 +8,32 @@
   <img alt="MongoDB" src="https://img.shields.io/badge/MongoDB-%234ea94b.svg?style=for-the-badge&logo=mongodb&logoColor=white" />
 </p>
 
-## LAB 1: WEB PROXY (CHECKPOINT 01)
+## LAB 2: LOGICALLY LINKED DBs (CHECKPOINT 02)
 
-##### Due: September 21/28, 2023
+##### Due: December 13, 2023
 
 ### ABOUT THIS BRANCH
 
-This branch contains second checkpoint for the `PAD LAB 1`.
+This branch contains first checkpoint for the `PAD LAB 2`.
 
 ### CHECKPOINT TERMS
 
-#### Assess Application Suitability - 2p
+#### How to Use this Application
 
-Here are some reasons why my idea might be relevant for a microservices architecture and real-world examples of well-known projects.
+1. Create a user to `POST` `{{gateway}}/api/users`
+2. Login with your user `POST` `{{gateway}}/api/auth/login`
+   - This will save a JWT token in your `Cookies` but you can set it manually in your `Headers` as well.
+3. Create a reservation to `POST` `{{gateway}}/api/reservations`
+   - You can execute all **CRUD** operations to this endpoint
+   - Get reservations details `POST` `{{gateway}}/api/reservations/:id`
+4. More features for payment to be added...
 
-1. **Scalability:** Very often, _Airline Reservation Systems_ need to handle a high level of traffic,
-   especially during peak travel seasons or special events. With the help of _microservices_, we can scale
-   specific components, to handle an increased load in a more efficient way.
-2. **Rapid Development and Deployment**: With the help of _microservices_, we allow teams and developers to develop and deploy
-   individual components independently. This will lead to faster development. `Airbnb` is an example of a company that uses microservices to continuously deploy updates and improvements to its platform.
-3. **Easier Maintenance:** With microservices, you can update and maintain individual components without affecting the entire system.
-4. **Geographic Distribution:** Airlines operate globally, and a distributed system can facilitate geographic distribution. By deploying microservices in different regions or countries, you can reduce latency for users in those areas, providing a better user experience.
-5. **Enhanced Resilience:** By adding microservices, we can build redundancy into critical components, ensuring high availability and disaster recovery. `Uber` uses microservices to maintain service availability even in the face of hardware or software failures.
-
----
-
-#### Define Service Boundaries - 2p
+#### Define Service Boundaries
 
 Microservices require clear service boundaries. Each microservice should encapsulate specific functionality, such as user authentication, product
 catalog, or order processing, to ensure modularity and independence. Here is a simple `architecture diagram`:
 
-![API Architecture Diagram](https://github.com/IuraCPersonal/pad-web-proxy/blob/feature/checkpoint-1/public/API-architecture-diagram.png)
+![API Architecture Diagram](https://github.com/IuraCPersonal/pad-web-proxy/blob/feature/checkpoint-4/public/API-architecture-diagram.png)
 
 In my application architecture, I identified three main services: the `Authentication Service`, `Flight Search Service` and `Flight Search Service`. Each having it's own responsabilities and database.
 
@@ -55,13 +50,7 @@ Next is a description of each **service** and its specific functionalities.
      - User Signup
      - User Profile Creation
 
-2. Flight Search
-
-   - **Search Flights**
-   - **Search Flights by Id**
-   - **Retrieve Flight Details**
-
-3. Flight Booking
+2. Flight Reservations
 
    - **Book a Flight**
    - **Retrieve Booking Details**
@@ -69,9 +58,14 @@ Next is a description of each **service** and its specific functionalities.
    - **Delete Bxisting Booking**
    - **Retrieve a List of Bookings for Any User**
 
+3. Payment Service
+
+   - **Generate Invoice**
+   - **Confirm Payment as Confirmed**
+
 ---
 
-#### Choose Technology Stack and Communication Patterns - 2p
+#### Technology Stack and Communication Patterns
 
 When implementing microservices, we must carefully choose the technology stack for each service. Using `JavaScript` (specifically `NestJS`) and `Python` for my microservices application can be a strategic and advantageous choice for various reasons:
 
@@ -89,7 +83,7 @@ For this application, I will be using **synchronous communication - REST**. Usin
 
 ---
 
-#### Design Data Management - 3p
+#### Design Data Management
 
 For this project, I will be working with **different databases for each microservice**.
 
@@ -100,96 +94,46 @@ I will also have an API gateway that acts as a central entry point for clients t
 
 Next I will enumerate all the endpoints across all my services and define the data to be transferred.
 
-| Endpoint                              | Method   | Description                                                                            |
-| ------------------------------------- | -------- | -------------------------------------------------------------------------------------- |
-| `/api/auth/login`                     | `POST`   | Login and retrieve an authentication token                                             |
-| `/api/auth/signup`                    | `POST`   | Signup and retrieve an authentication token                                            |
-| `/api/flights/search`                 | `GET`    | Search for flights based on the origin and destination airports                        |
-| `/api/flights/search?filterBy=filter` | `GET`    | Search for flights based on specific filter                                            |
-| `/api/flights/{flightId}`             | `GET`    | Retrieve detailed information about that specific flight                               |
-| `/api/bookings`                       | `POST`   | Create a new flight booking by providing details                                       |
-| `/api/bookings/{bookingId}`           | `GET`    | Retrieve details about a specific booking by providing the booking ID                  |
-| `/api/bookings/{bookingId}`           | `PUT`    | Allows users to modify their booking details                                           |
-| `/api/bookings/{bookingId}`           | `DELETE` | Delete a specific booking by providing the booking ID                                  |
-| `/api/bookings/user/{userId}`         | `GET`    | Retrieve a list of bookings associated with a specific user by providing their user ID |
+| Endpoint                        | Method   | Description                                                           |
+| ------------------------------- | -------- | --------------------------------------------------------------------- |
+| `/api/auth/login`               | `POST`   | Login and retrieve an authentication token                            |
+| `/api/users`                    | `POST`   | Signup and retrieve an authentication token                           |
+| `/api/reservations`             | `POST`   | Create a new flight booking by providing details                      |
+| `/api/reservations/{bookingId}` | `GET`    | Retrieve details about a specific booking by providing the booking ID |
+| `/api/reservations/{bookingId}` | `PUT`    | Allows users to modify their booking details                          |
+| `/api/reservations/{bookingId}` | `DELETE` | Delete a specific booking by providing the booking ID                 |
 
 For a more enhanced description of all the available `endpoints`, please refer to this [DOCUMENT](https://github.com/IuraCPersonal/pad-web-proxy/blob/feature/checkpoint-1/ENDPOINTS.md).
 
-Example of how a `flight` object would look like:
+Example of `user` authentication:
 
 ```json
 {
-  "flightId": "FL12345",
-  "airline": "Airline Name",
-  "originAirport": "Origin Airport Code (e.g., JFK)",
-  "destinationAirport": "Destination Airport Code (e.g., LAX)",
-  "departureDateTime": "2023-09-30T08:00:00Z",
-  "arrivalDateTime": "2023-09-30T11:30:00Z",
-  "duration": "3 hours 30 minutes",
-  "availableSeats": 120,
-  "totalSeats": 150,
-  "cabinClass": "Economy",
-  "price": {
-    "amount": 250.0,
-    "currency": "USD"
-  },
-  "layovers": [
-    {
-      "airport": "Connecting Airport Code (if applicable)",
-      "layoverDuration": "2 hours"
-    }
-  ],
-  "flightNumber": "AI123",
-  "aircraftType": "Boeing 737",
-  "status": "Scheduled"
+  "email": "testuser1.reservations@gmail.com",
+  "password": "TestUser123$"
 }
 ```
 
-And an example of a `booking` object:
+And an example of a `reservations` object:
 
 ```json
 {
-  "bookingId": "B123456789",
-  "userId": "U123456789",
-  "flights": [
-    {
-      "flightId": "FL12345",
-      "airline": "Airline Name",
-      "departureDateTime": "2023-09-30T08:00:00Z",
-      "arrivalDateTime": "2023-09-30T11:30:00Z",
-      "cabinClass": "Economy",
-      "price": {
-        "amount": 250.0,
-        "currency": "USD"
-      }
+  "startDate": "02-03-2022",
+  "endDate": "03-04-2023",
+  "flightId": "AABB12332",
+  "payment": {
+    "amount": 200,
+    "card": {
+      "number": "4242 4242 4242 4242",
+      "expMonth": 5,
+      "expYear": 2029,
+      "cvc": "454"
     }
-  ],
-  "passengers": [
-    {
-      "firstName": "John",
-      "lastName": "Doe",
-      "dateOfBirth": "1990-05-15",
-      "gender": "Male"
-    },
-    {
-      "firstName": "Jane",
-      "lastName": "Doe",
-      "dateOfBirth": "1992-08-20",
-      "gender": "Female"
-    }
-  ],
-  "totalPrice": {
-    "amount": 500.0,
-    "currency": "USD"
-  },
-  "status": "Confirmed",
-  "bookingDate": "2023-09-15T10:30:00Z",
-  "paymentMethod": "Credit Card",
-  "paymentStatus": "Paid"
+  }
 }
 ```
 
-#### Set Up Deployment and Scaling - 1p
+#### Set Up Deployment and Scaling
 
 In this section I will introduce the tools I chose to deploy and scale my microservices. Deploying and scaling microservices efficiently is crucial for maintaining the reliability and availability of my application. Here's a high-level plan on how I will use Docker and Kubernetes for this purpose:
 

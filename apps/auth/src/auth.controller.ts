@@ -8,10 +8,10 @@ import {
 } from '@app/common';
 import { UserDocument } from './users/models/user.schema';
 import { Response } from 'express';
-import { MessagePattern, Payload } from '@nestjs/microservices';
+import { Payload } from '@nestjs/microservices';
 import { JwtAuthGuard } from './guards/jwt-auth.guard';
 
-@Controller('auth')
+@Controller('api/auth')
 @AuthServiceControllerMethods()
 export class AuthController implements AuthServiceController {
   constructor(private readonly authService: AuthService) {}

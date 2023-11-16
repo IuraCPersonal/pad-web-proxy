@@ -14,7 +14,7 @@ import { UpdateReservationDto } from './dto/update-reservation.dto';
 import { CurrentUser, JwtAuthGuard, UserDto } from '@app/common';
 import { CircuitBreakerService } from '@app/common/circuit-breaker/circuit-breaker.service';
 
-@Controller('reservations')
+@Controller('api/reservations')
 export class ReservationsController {
   constructor(
     private readonly reservationsService: ReservationsService,
@@ -22,7 +22,7 @@ export class ReservationsController {
   ) {}
 
   @Post()
-  // @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard)
   async create(
     @Body() createReservationDto: CreateReservationDto,
     @CurrentUser() user: UserDto,
@@ -43,7 +43,7 @@ export class ReservationsController {
   }
 
   @Get()
-  // @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard)
   async findAll() {
     return this.reservationsService.findAll();
   }
@@ -56,13 +56,13 @@ export class ReservationsController {
   }
 
   @Get(':id')
-  // @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard)
   async findOne(@Param('id') id: string) {
     return this.reservationsService.findOne(id);
   }
 
   @Patch(':id')
-  // @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard)
   async update(
     @Param('id') id: string,
     @Body() updateReservationDto: UpdateReservationDto,
@@ -71,7 +71,7 @@ export class ReservationsController {
   }
 
   @Delete(':id')
-  // @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard)
   async remove(@Param('id') id: string) {
     return this.reservationsService.remove(id);
   }

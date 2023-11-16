@@ -41,35 +41,35 @@ services:
     depends_on:
       - service-discovery
 
-  # auth:
-  #   build:
-  #     context: .
-  #     dockerfile: ./apps/auth/Dockerfile
-  #     target: development
-  #   command: pnpm run start:dev auth
-  #   env_file:
-  #     - './apps/auth/.env'
-  #   ports:
-  #     - '3001:3001'
-  #   volumes:
-  #     - .:/usr/src/app
-  #   depends_on:
-  #     - service-discovery
+  auth:
+    build:
+      context: .
+      dockerfile: ./apps/auth/Dockerfile
+      target: development
+    command: pnpm run start:dev auth
+    env_file:
+      - './apps/auth/.env'
+    ports:
+      - '3001:3001'
+    volumes:
+      - .:/usr/src/app
+    depends_on:
+      - service-discovery
 
-  # payments:
-  #   build:
-  #     context: .
-  #     dockerfile: ./apps/payments/Dockerfile
-  #     target: development
-  #   command: pnpm run start:dev payments
-  #   env_file:
-  #     - './apps/payments/.env'
-  #   ports:
-  #     - '3003:3003'
-  #   volumes:
-  #     - .:/usr/src/app
-  #   depends_on:
-  #     - service-discovery
+  payments:
+    build:
+      context: .
+      dockerfile: ./apps/payments/Dockerfile
+      target: development
+    command: pnpm run start:dev payments
+    env_file:
+      - './apps/payments/.env'
+    ports:
+      - '3003:3003'
+    volumes:
+      - .:/usr/src/app
+    depends_on:
+      - service-discovery
 
   gateway:
     build:
@@ -106,8 +106,8 @@ services:
     command: mongod --quiet --logpath /dev/null
     logging:
       driver: none
-  # auth-db:
-  #   image: mongo
-  #   command: mongod --quiet --logpath /dev/null
-  #   logging:
-  #     driver: none
+  auth-db:
+    image: mongo
+    command: mongod --quiet --logpath /dev/null
+    logging:
+      driver: none
