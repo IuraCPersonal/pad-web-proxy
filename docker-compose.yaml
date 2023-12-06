@@ -1,7 +1,7 @@
 services:
-  reservations-1:
-    hostname: reservations-1
-    container_name: reservations-1
+  reservations:
+    hostname: reservations
+    container_name: reservations
     build:
       context: .
       dockerfile: ./apps/reservations/Dockerfile
@@ -9,39 +9,14 @@ services:
     command: pnpm run start:dev reservations
     env_file:
       - './apps/reservations/.env'
-    environment:
-      - SELF_NAME=reservations-1
-      - SELF_HOST=reservations-1
-      - PORT=3000
     ports:
       - '3000:3000'
     volumes:
       - .:/usr/src/app
-    depends_on:
-      - service-discovery
-
-  reservations-2:
-    hostname: reservations-2
-    container_name: reservations-2
-    build:
-      context: .
-      dockerfile: ./apps/reservations/Dockerfile
-      target: development
-    command: pnpm run start:dev reservations
-    env_file:
-      - './apps/reservations/.env'
-    environment:
-      - SELF_NAME=reservations-2
-      - SELF_HOST=reservations-2
-      - PORT=4000
-    ports:
-      - '4000:4000'
-    volumes:
-      - .:/usr/src/app
-    depends_on:
-      - service-discovery
 
   auth:
+    hostname: auth
+    container_name: auth
     build:
       context: .
       dockerfile: ./apps/auth/Dockerfile
@@ -53,10 +28,10 @@ services:
       - '3001:3001'
     volumes:
       - .:/usr/src/app
-    depends_on:
-      - service-discovery
 
   payments:
+    hostname: payments
+    container_name: payments
     build:
       context: .
       dockerfile: ./apps/payments/Dockerfile
@@ -68,44 +43,13 @@ services:
       - '3003:3003'
     volumes:
       - .:/usr/src/app
-    depends_on:
-      - service-discovery
-
-  gateway:
-    build:
-      context: ./gateway
-      dockerfile: ./Dockerfile
-    ports:
-      - '8888:8888'
-    depends_on:
-      - redis-cache
-      - service-discovery
-
-  service-discovery:
-    build:
-      context: ./service_discovery
-      dockerfile: ./Dockerfile
-    ports:
-      - '7777:7777'
-
-  redis-cache:
-    image: redis:alpine
-    hostname: redis-cache
-    container_name: redis-cache
-    restart: on-failure
-    ports:
-      - '6379:6379'
-    command: redis-server
-    volumes:
-      - .:/usr/src/app
-    depends_on:
-      - service-discovery
 
   reservations-db:
     image: mongo
     command: mongod --quiet --logpath /dev/null
     logging:
       driver: none
+
   auth-db:
     image: mongo
     command: mongod --quiet --logpath /dev/null

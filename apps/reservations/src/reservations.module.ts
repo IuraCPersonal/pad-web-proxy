@@ -10,7 +10,6 @@ import {
   PAYMENTS_PACKAGE_NAME,
   AUTH_SERVICE_NAME,
   PAYMENTS_SERVICE_NAME,
-  CircuitBreakerModule,
 } from '@app/common';
 import { ReservationsRepository } from './reservations.repository';
 import {
@@ -63,7 +62,6 @@ import { join } from 'path';
     ]),
     HealthModule,
     ThrottlerGuardModule,
-    CircuitBreakerModule,
   ],
   controllers: [ReservationsController],
   providers: [ReservationsService, ReservationsRepository],
