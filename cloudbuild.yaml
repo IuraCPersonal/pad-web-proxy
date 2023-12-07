@@ -1,6 +1,6 @@
 steps:
   # RESERVATIONS SERVICE
-  - name: "grc.io/cloud-builders/docker"
+  - name: "gcr.io/cloud-builders/docker"
     args:
       [
         "build",
@@ -10,7 +10,7 @@ steps:
         "apps/reservations/Dockerfile",
         ".",
       ]
-  - name: "grc.io/cloud-builders/docker"
+  - name: "gcr.io/cloud-builders/docker"
     args:
       [
         "push",
@@ -18,7 +18,7 @@ steps:
       ]
 
   # AUTH SERVICE
-  - name: "grc.io/cloud-builders/docker"
+  - name: "gcr.io/cloud-builders/docker"
     args:
       [
         "build",
@@ -28,7 +28,7 @@ steps:
         "apps/auth/Dockerfile",
         ".",
       ]
-  - name: "grc.io/cloud-builders/docker"
+  - name: "gcr.io/cloud-builders/docker"
     args:
       [
         "push",
@@ -36,7 +36,7 @@ steps:
       ]
 
   # PAYMENTS SERVICE
-  - name: "grc.io/cloud-builders/docker"
+  - name: "gcr.io/cloud-builders/docker"
     args:
       [
         "build",
@@ -46,7 +46,7 @@ steps:
         "apps/payments/Dockerfile",
         ".",
       ]
-  - name: "grc.io/cloud-builders/docker"
+  - name: "gcr.io/cloud-builders/docker"
     args:
       [
         "push",
