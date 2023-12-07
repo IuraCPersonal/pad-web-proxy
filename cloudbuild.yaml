@@ -1,0 +1,54 @@
+steps:
+  # RESERVATIONS SERVICE
+  - name: "grc.io/cloud-builders/docker"
+    args:
+      [
+        "build",
+        "-t",
+        "europe-west4-docker.pkg.dev/pad-web-proxy/reservations/production",
+        "-f",
+        "apps/reservations/Dockerfile",
+        ".",
+      ]
+  - name: "grc.io/cloud-builders/docker"
+    args:
+      [
+        "push",
+        "europe-west4-docker.pkg.dev/pad-web-proxy/reservations/production",
+      ]
+
+  # AUTH SERVICE
+  - name: "grc.io/cloud-builders/docker"
+    args:
+      [
+        "build",
+        "-t",
+        "europe-west4-docker.pkg.dev/pad-web-proxy/auth/production",
+        "-f",
+        "apps/auth/Dockerfile",
+        ".",
+      ]
+  - name: "grc.io/cloud-builders/docker"
+    args:
+      [
+        "push",
+        "europe-west4-docker.pkg.dev/pad-web-proxy/auth/production",
+      ]
+
+  # PAYMENTS SERVICE
+  - name: "grc.io/cloud-builders/docker"
+    args:
+      [
+        "build",
+        "-t",
+        "europe-west4-docker.pkg.dev/pad-web-proxy/payments/production",
+        "-f",
+        "apps/payments/Dockerfile",
+        ".",
+      ]
+  - name: "grc.io/cloud-builders/docker"
+    args:
+      [
+        "push",
+        "europe-west4-docker.pkg.dev/pad-web-proxy/payments/production",
+      ]
