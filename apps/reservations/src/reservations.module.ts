@@ -20,6 +20,7 @@ import * as Joi from 'joi';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { ClientsModule, Transport } from '@nestjs/microservices';
 import { join } from 'path';
+import { PrometheusModule } from '@willsoto/nestjs-prometheus';
 
 @Module({
   imports: [
@@ -62,6 +63,7 @@ import { join } from 'path';
     ]),
     HealthModule,
     ThrottlerGuardModule,
+    PrometheusModule.register(),
   ],
   controllers: [ReservationsController],
   providers: [ReservationsService, ReservationsRepository],
