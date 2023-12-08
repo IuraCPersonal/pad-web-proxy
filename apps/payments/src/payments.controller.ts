@@ -15,9 +15,4 @@ export class PaymentsController implements PaymentsServiceController {
   async createPayment(data: CreatePaymentDto) {
     return this.paymentsService.createPayment(data);
   }
-
-  // @Post('/confirm')
-  // async confirmPayment() {
-  //   return this.paymentsService.confirmPayment();
-  // }
 }
