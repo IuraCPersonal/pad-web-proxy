@@ -1,3 +1,5 @@
+version: '3'
+
 services:
   reservations:
     hostname: reservations
@@ -44,16 +46,96 @@ services:
     volumes:
       - .:/usr/src/app
 
-  # redis-cache:
-  #   image: redis:alpine
-  #   hostname: redis-cache
-  #   container_name: redis-cache
-  #   restart: on-failure
-  #   ports:
-  #     - '6379:6379'
-  #   command: redis-server
-  #   volumes:
-  #     - .:/usr/src/app
+  service-discovery:
+    build:
+      context: ./service_discovery
+      dockerfile: ./Dockerfile
+    ports:
+      - '7777:7777'
+
+  gateway:
+    build:
+      context: ./gateway
+      dockerfile: ./Dockerfile
+    ports:
+      - '8888:8888'
+    depends_on:
+      - service-discovery
+
+  redis-node-1:
+    image: redis:latest
+    ports:
+      - 7000:7000
+    hostname: redis-node-1
+    container_name: redis-node-1
+    volumes:
+      - ./redis/7000:/redis
+    command: redis-server /redis/redis.conf
+
+  redis-node-2:
+    image: redis:latest
+    ports:
+      - 7001:7001
+    hostname: redis-node-2
+    container_name: redis-node-2
+    volumes:
+      - ./redis/7001:/redis
+    command: redis-server /redis/redis.conf
+
+  redis-node-3:
+    image: redis:latest
+    ports:
+      - 7002:7002
+    hostname: redis-node-3
+    container_name: redis-node-3
+    volumes:
+      - ./redis/7002:/redis
+    command: redis-server /redis/redis.conf
+
+  redis-node-4:
+    image: redis:latest
+    ports:
+      - 7003:7003
+    hostname: redis-node-4
+    container_name: redis-node-4
+    volumes:
+      - ./redis/7003:/redis
+    command: redis-server /redis/redis.conf
+
+  redis-node-5:
+    image: redis:latest
+    ports:
+      - 7004:7004
+    hostname: redis-node-5
+    container_name: redis-node-5
+    volumes:
+      - ./redis/7004:/redis
+    command: redis-server /redis/redis.conf
+
+  redis-node-6:
+    image: redis:latest
+    ports:
+      - 7005:7005
+    hostname: redis-node-6
+    container_name: redis-node-6
+    volumes:
+      - ./redis/7005:/redis
+    command: redis-server /redis/redis.conf
+
+  redis-cluster-creator:
+    image: redis:latest
+    ports:
+      - 6999:6999
+    command: redis-cli -p 7000 --cluster create redis-node-1:7000 redis-node-2:7001 redis-node-3:7002 redis-node-4:7003 redis-node-5:7004 redis-node-6:7005 --cluster-replicas 1 --cluster-yes
+    depends_on:
+      - redis-node-1
+      - redis-node-2
+      - redis-node-3
+      - redis-node-4
+      - redis-node-5
+      - redis-node-6
+    expose:
+      - 6999
 
   reservations-db:
     image: mongo
@@ -66,24 +148,23 @@ services:
     command: mongod --quiet --logpath /dev/null
     logging:
       driver: none
+#   prometheus:
+#     image: prom/prometheus
+#     volumes:
+#       - ./prometheus:/etc/prometheus
+#     command:
+#       - '--config.file=/etc/prometheus/prometheus.yml'
+#     ports:
+#       - 9090:9090
 
-  prometheus:
-    image: prom/prometheus
-    volumes:
-      - ./prometheus:/etc/prometheus
-    command:
-      - '--config.file=/etc/prometheus/prometheus.yml'
-    ports:
-      - 9090:9090
+#   grafana:
+#     image: grafana/grafana
+#     volumes:
+#       - grafana_data:/var/lib/grafana
+#     ports:
+#       - 3000:3000
+#     depends_on:
+#       - prometheus
 
-  grafana:
-    image: grafana/grafana
-    volumes:
-      - grafana_data:/var/lib/grafana
-    ports:
-      - 3000:3000
-    depends_on:
-      - prometheus
-
-volumes:
-  grafana_data:
+# volumes:
+#   grafana_data:

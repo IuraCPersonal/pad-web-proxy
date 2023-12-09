@@ -1,0 +1,7 @@
+fastapi==0.104.0
+httpx==0.25.0
+pybreaker==1.0.2
+pydantic==2.4.2
+redis==3.5.1
+uvicorn==0.15.0
+redis-py-cluster==2.1.3
